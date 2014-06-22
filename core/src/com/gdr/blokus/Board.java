@@ -139,6 +139,11 @@ public class Board {
 		return axis;
 	}
 	
+	public int getWidth()
+	{
+		return mBoardWidth;
+	}
+	
 	private class Grid 
 	{
 		int owner;

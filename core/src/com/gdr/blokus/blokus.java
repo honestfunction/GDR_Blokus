@@ -22,15 +22,22 @@ public class blokus extends ApplicationAdapter {
 		mBoard.setColor(2, 5, 5);
 	}
 
+	private void updateBoard()
+	{
+		if(mBoard.needToUpdate()){
+			mSprite = new Sprite(mBoard.updateBoard());
+			mSprite.setPosition((Gdx.graphics.getWidth()-mBoard.getWidth())/2, 
+					(Gdx.graphics.getHeight()-mBoard.getWidth())/2);
+		}
+		mSprite.draw(batch);
+	}
+	
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();		
-		if(mBoard.needToUpdate()){
-			mSprite = new Sprite(mBoard.updateBoard());
-		}
-		mSprite.draw(batch);
+		batch.begin();
+		updateBoard();
 		batch.end();
 	}
 }

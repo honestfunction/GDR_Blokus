@@ -31,7 +31,6 @@ public class blokus extends ApplicationAdapter {
 			mSprite = new Sprite(mBoard.updateBoard());
 		}
 		mSprite.draw(batch);
-		//batch.draw(img, 0, 0);
 		batch.end();
 	}
 }

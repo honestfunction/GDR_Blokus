@@ -46,11 +46,12 @@ public class Board {
 			mGridNumber=BOARD_GRIDS_2P;
 		}
 		
-		initialBoardGrids();
+		initBoardGrids();
 		setBoardEmpty();
+		initPixmap();
 	}
 	
-	private void initialBoardGrids()
+	private void initBoardGrids()
 	{
 		mGrids = new Grid [mGridNumber][];
 		for (int i=0; i < mGridNumber ; i++)
@@ -61,15 +62,18 @@ public class Board {
 				   mGrids[i][j] = new Grid();
 	}
 	
-	private void drawBoard()
+	private void initPixmap()
 	{
 		mBoardWidth = mGridNumber*(GRID_WIDTH_DEFAULT+1)+1;
-		mPixmapBoard = new Pixmap(mBoardWidth, mBoardWidth, Pixmap.Format.RGBA8888);
+		mPixmapBoard = new Pixmap(mBoardWidth, mBoardWidth, Pixmap.Format.RGB565);
 		drawBoardBgColor();
-		drawBoardEdges();
+		drawBoardEdges();		
+	}
+	
+	private void drawBoard()
+	{
 		drawBoardFields();
 		mTextureBoard = new Texture(mPixmapBoard);
-		mPixmapBoard.dispose();
 	}
 	
 	private void drawBoardBgColor()

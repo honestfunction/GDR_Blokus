@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Board {
 	
-	final int BOARD_WIDTH_2P = 14; //grids
-	final int BOARD_WIDTH_DEFAULT= 20;
+	final int BOARD_GRIDS_2P = 14; //grids
+	final int BOARD_GRIDS_DEFAULT= 20;
 	final int GRID_WIDTH_DEFAULT =30; //pixels
 	final Color BACKGROUND_COLOR=Color.GRAY;
 	final Color EDGE_COLOR=Color.BLACK; 
@@ -40,10 +40,10 @@ public class Board {
 	private void setupBoard()
 	{
 		if(mPlayers>2) {
-			mGridNumber=BOARD_WIDTH_DEFAULT;
+			mGridNumber=BOARD_GRIDS_DEFAULT;
 			
 		} else {
-			mGridNumber=BOARD_WIDTH_2P;
+			mGridNumber=BOARD_GRIDS_2P;
 		}
 		
 		initialBoardGrids();
@@ -92,8 +92,8 @@ public class Board {
 		Axis startAxis;
 		for(int i=0;i<mGridNumber;i++)
 			for(int j=0;j<mGridNumber;j++) {
-				if(mGrids[i][j].fieldColor!=BACKGROUND_COLOR) {
-					mPixmapBoard.setColor(mGrids[i][j].fieldColor);
+				if(mGrids[i][j].owner!=0) {
+					mPixmapBoard.setColor(PlayerColor[mGrids[i][j].owner]);
 					startAxis = getStartAxis(i,j);
 					mPixmapBoard.fillRectangle(startAxis.x, startAxis.y, 
 							GRID_WIDTH_DEFAULT, GRID_WIDTH_DEFAULT);
@@ -105,13 +105,13 @@ public class Board {
 	{
 		for(int i=0;i<mGridNumber;i++)
 			for(int j=0;j<mGridNumber;j++) {
-				mGrids[i][j].fieldColor=PlayerColor[0];
+				mGrids[i][j].owner=0;
 			}
 	}
 	
 	public void setColor(int playerID, int x, int y)
 	{
-		mGrids[x][y].fieldColor = PlayerColor[playerID];
+		mGrids[x][y].owner = playerID;
 		mUpdateNeeded = true;
 	}
 	
@@ -137,7 +137,7 @@ public class Board {
 	
 	private class Grid 
 	{
-		Color fieldColor;
+		int owner;
 	}
 	
 	private class Axis

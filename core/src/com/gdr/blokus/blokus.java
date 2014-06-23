@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+
 public class blokus extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
@@ -16,28 +17,18 @@ public class blokus extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		//img = new Texture("badlogic.jpg");
 		mBoard = new Board();
 		mBoard.initial();
-		mBoard.setColor(2, 5, 5);
+		//mBoard.setColor(2, 5, 5);
+		//mBoard.setColor(1, 2, 3);
 	}
 
-	private void updateBoard()
-	{
-		if(mBoard.needToUpdate()){
-			mSprite = new Sprite(mBoard.updateBoard());
-			mSprite.setPosition((Gdx.graphics.getWidth()-mBoard.getWidth())/2, 
-					(Gdx.graphics.getHeight()-mBoard.getWidth())/2);
-		}
-		mSprite.draw(batch);
-	}
-	
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		updateBoard();
+		mBoard.draw(batch);
 		batch.end();
 	}
 }

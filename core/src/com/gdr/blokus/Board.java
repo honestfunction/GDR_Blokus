@@ -1,7 +1,10 @@
 package com.gdr.blokus;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Board {
 	
@@ -10,15 +13,15 @@ public class Board {
 	final int GRID_WIDTH_DEFAULT =30; //pixels
 	final Color BACKGROUND_COLOR=Color.GRAY;
 	final Color EDGE_COLOR=Color.BLACK; 
-	final Color [] PlayerColor ={BACKGROUND_COLOR, Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW};
-    private Pixmap mPixmapBoard;
+	final Color [] PLAYER_COLOR ={BACKGROUND_COLOR, Color.GREEN, Color.BLUE, Color.RED, Color.YELLOW};
     private Texture mTextureBoard;
-
+    private Pixmap [] mPixmapGrid;
 	int mPlayers;
 	int mGridNumber;
 	int mBoardWidth;
 	boolean mUpdateNeeded=true;
-	
+	Axis mBoardLayout;
+	Sprite mSprite;
 	Grid[][] mGrids;
 	
 	Board()
@@ -34,7 +37,14 @@ public class Board {
 	public void initial()
 	{
 		setupBoard();
-		//drawBoard();
+		initLayout();
+	}
+	
+	private void initLayout()
+	{
+		mBoardLayout = new Axis();
+		mBoardLayout.x = (Gdx.graphics.getWidth()-getWidth())/2;
+		mBoardLayout.y = (Gdx.graphics.getHeight()-getWidth())/2;
 	}
 	
 	private void setupBoard()
@@ -48,7 +58,8 @@ public class Board {
 		
 		initBoardGrids();
 		setBoardEmpty();
-		initPixmap();
+		initBoardPixmap();
+		initFieldsPixmap();
 	}
 	
 	private void initBoardGrids()
@@ -62,45 +73,58 @@ public class Board {
 				   mGrids[i][j] = new Grid();
 	}
 	
-	private void initPixmap()
+	private void initBoardPixmap()
 	{
 		mBoardWidth = mGridNumber*(GRID_WIDTH_DEFAULT+1)+1;
-		mPixmapBoard = new Pixmap(mBoardWidth, mBoardWidth, Pixmap.Format.RGB565);
-		drawBoardBgColor();
-		drawBoardEdges();		
+		Pixmap pixmapBoard = new Pixmap(mBoardWidth, mBoardWidth, Pixmap.Format.RGB565);
+		drawBoardBgColor(pixmapBoard);
+		drawBoardEdges(pixmapBoard);
+		mTextureBoard = new Texture(pixmapBoard);
+		pixmapBoard.dispose();
+	}
+		
+	private void drawBoardBgColor(Pixmap pBoard)
+	{
+		pBoard.setColor(BACKGROUND_COLOR);
+		pBoard.fill();
 	}
 	
-	private void drawBoard()
+	private void drawBoardEdges(Pixmap pBoard)
 	{
-		drawBoardFields();
-		mTextureBoard = new Texture(mPixmapBoard);
-	}
-	
-	private void drawBoardBgColor()
-	{
-		mPixmapBoard.setColor(BACKGROUND_COLOR);
-		mPixmapBoard.fill();
-	}
-	
-	private void drawBoardEdges()
-	{
-		mPixmapBoard.setColor(EDGE_COLOR);
+		pBoard.setColor(EDGE_COLOR);
 		for(int i=0; i<mBoardWidth; i+= (GRID_WIDTH_DEFAULT+1)) {
-			mPixmapBoard.drawLine(i, 0, i, mBoardWidth);
-			mPixmapBoard.drawLine(0, i, mBoardWidth, i);
+			pBoard.drawLine(i, 0, i, mBoardWidth);
+			pBoard.drawLine(0, i, mBoardWidth, i);
 		}
+	}
+	
+	private void initFieldsPixmap()
+	{
+		int numberFieldsPixmap= mPlayers+1;
+		mPixmapGrid = new Pixmap[numberFieldsPixmap];
+		for(int i=0; i< numberFieldsPixmap; i++){
+			mPixmapGrid[i] = new Pixmap(GRID_WIDTH_DEFAULT, GRID_WIDTH_DEFAULT, Pixmap.Format.RGB565);
+			mPixmapGrid[i].setColor(PLAYER_COLOR[i]);
+			mPixmapGrid[i].fill();
+		}
+	}
+	
+	private void drawField(int i, int j)
+	{
+		Axis gridAxis;
+		gridAxis = getGridAxis(i,j);
+		mTextureBoard.draw(mPixmapGrid[mGrids[i][j].owner], gridAxis.x, gridAxis.y);
 	}
 	
 	private void drawBoardFields()
 	{
-		Axis startAxis;
+		if(!mUpdateNeeded)
+			return;
+		
 		for(int i=0;i<mGridNumber;i++)
 			for(int j=0;j<mGridNumber;j++) {
 				if(mGrids[i][j].owner!=0) {
-					mPixmapBoard.setColor(PlayerColor[mGrids[i][j].owner]);
-					startAxis = getStartAxis(i,j);
-					mPixmapBoard.fillRectangle(startAxis.x, startAxis.y, 
-							GRID_WIDTH_DEFAULT, GRID_WIDTH_DEFAULT);
+					drawField(i,j);
 				}
 			}
 	}
@@ -119,19 +143,7 @@ public class Board {
 		mUpdateNeeded = true;
 	}
 	
-	public Texture updateBoard()
-	{
-		drawBoard();
-		mUpdateNeeded=false;
-		return mTextureBoard;
-	}
-	
-	public boolean needToUpdate()
-	{
-		return mUpdateNeeded;
-	}
-	
-	private Axis getStartAxis(int gridX, int gridY)
+	private Axis getGridAxis(int gridX, int gridY)
 	{
 		Axis axis=new Axis();
 		axis.x = 1 + gridX * (GRID_WIDTH_DEFAULT+1) ;
@@ -142,6 +154,20 @@ public class Board {
 	public int getWidth()
 	{
 		return mBoardWidth;
+	}
+	
+	
+	private void drawBoard()
+	{
+		drawBoardFields();
+		mSprite = new Sprite(mTextureBoard);
+		mSprite.setPosition(mBoardLayout.x, mBoardLayout.y);
+	}
+
+	public void draw(SpriteBatch batch)
+	{
+		drawBoard();
+		mSprite.draw(batch);
 	}
 	
 	private class Grid 

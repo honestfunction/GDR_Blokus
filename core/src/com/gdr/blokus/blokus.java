@@ -19,10 +19,11 @@ public class blokus extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		mBoard = new Board();
 		mBoard.initial();
-		//mBoard.setColor(2, 5, 5);
-		//mBoard.setColor(1, 2, 3);
+		mBoard.setColor(2, 5, 5);
+		mBoard.setColor(1, 2, 3);
+		mBoard.setGridBorder(false, 10, 10);
 	}
-
+	
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 0);

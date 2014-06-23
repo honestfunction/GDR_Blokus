@@ -1,5 +1,7 @@
 package com.gdr.blokus;
 
-public class Layout {
+import com.gdr.blokus.Board.Axis;
 
+public final class Layout {
+	static Axis BOARD_LAYOUT;
 }

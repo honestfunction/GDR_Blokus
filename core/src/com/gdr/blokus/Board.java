@@ -16,13 +16,13 @@ public class Board {
 	final Color [] PLAYER_COLORS ={BACKGROUND_COLOR, Color.GREEN, Color.BLUE, Color.PINK, Color.YELLOW};
 	final Color [] BORDER_COLORS ={EDGE_COLOR, Color.WHITE, Color.RED};
     private Texture mTextureBoard;
-    private Pixmap mPixmapBoard;
-    private Pixmap [] mPixmapGrid;
-    private Pixmap [] mPixmapBorder;
+    private Texture [] mTextureGrid;
+    private Texture [] mTextureBorder;
 	int mPlayers;
 	int mGridNumber;
 	int mBoardWidth;
 	boolean mUpdateNeeded=true;
+	SpriteBatch mBatch;
 	
 	Sprite mSprite;
 	Grid[][] mGrids;
@@ -37,8 +37,9 @@ public class Board {
 		mPlayers = players;
 	}
 	
-	public void initial()
+	public void initial(SpriteBatch batch)
 	{
+		mBatch=batch;
 		setupBoard();
 		initLayout();
 	}
@@ -61,9 +62,9 @@ public class Board {
 		
 		initBoardGrids();
 		setBoardEmpty();
-		initBoardPixmap();
-		initFieldsPixmap();
-		initBorderPixmap();
+		initBoardImage();
+		initFieldsImage();
+		initBorderImage();
 	}
 	
 	private void initBoardGrids()
@@ -77,49 +78,53 @@ public class Board {
 				   mGrids[i][j] = new Grid();
 	}
 	
-	private void initBoardPixmap()
+	private void initBoardImage()
 	{
 		mBoardWidth = mGridNumber*(GRID_WIDTH_DEFAULT+1)+1;
-		mPixmapBoard = new Pixmap(mBoardWidth, mBoardWidth, Pixmap.Format.RGBA8888);
-		drawBoardBgColor();
-		drawBoardEdges();
-		mTextureBoard = new Texture(mPixmapBoard);
+		Pixmap pBoard = new Pixmap(mBoardWidth, mBoardWidth, Pixmap.Format.RGBA8888);
+		drawBoardBgColor(pBoard);
+		drawBoardEdges(pBoard);
+		mTextureBoard = new Texture(pBoard);
 	}
 		
-	private void drawBoardBgColor()
+	private void drawBoardBgColor(Pixmap pBoard)
 	{
-		mPixmapBoard.setColor(BACKGROUND_COLOR);
-		mPixmapBoard.fill();
+		pBoard.setColor(BACKGROUND_COLOR);
+		pBoard.fill();
 	}
 	
-	private void drawBoardEdges()
+	private void drawBoardEdges(Pixmap pBoard)
 	{
-		mPixmapBoard.setColor(EDGE_COLOR);
+		pBoard.setColor(EDGE_COLOR);
 		for(int i=0; i<mBoardWidth; i+= (GRID_WIDTH_DEFAULT+1)) {
-			mPixmapBoard.drawLine(i, 0, i, mBoardWidth);
-			mPixmapBoard.drawLine(0, i, mBoardWidth, i);
+			pBoard.drawLine(i, 0, i, mBoardWidth);
+			pBoard.drawLine(0, i, mBoardWidth, i);
 		}
 	}
 	
-	private void initFieldsPixmap()
+	private void initFieldsImage()
 	{
-		int numberFieldsPixmap= mPlayers+1;
-		mPixmapGrid = new Pixmap[numberFieldsPixmap];
-		for(int i=0; i< numberFieldsPixmap; i++){
-			mPixmapGrid[i] = new Pixmap(GRID_WIDTH_DEFAULT, GRID_WIDTH_DEFAULT, Pixmap.Format.RGBA8888);
-			mPixmapGrid[i].setColor(PLAYER_COLORS[i]);
-			mPixmapGrid[i].fill();
+		int numberFieldsType= mPlayers+1;
+		mTextureGrid = new Texture[numberFieldsType];
+		Pixmap pixmapGrid;
+		for(int i=0; i< numberFieldsType; i++){
+			pixmapGrid = new Pixmap(GRID_WIDTH_DEFAULT, GRID_WIDTH_DEFAULT, Pixmap.Format.RGBA8888);
+			pixmapGrid.setColor(PLAYER_COLORS[i]);
+			pixmapGrid.fill();
+			mTextureGrid[i] = new Texture(pixmapGrid);
 		}
 	}
 	
-	private void initBorderPixmap()
+	private void initBorderImage()
 	{
-		mPixmapBorder = new Pixmap[BORDER_COLORS.length];
+		Pixmap pixmapBorder;
+		mTextureBorder = new Texture[BORDER_COLORS.length];
 		for(int i=0; i < BORDER_COLORS.length; i++)
 		{
-			mPixmapBorder[i] = new Pixmap(GRID_WIDTH_DEFAULT+2, GRID_WIDTH_DEFAULT+2, Pixmap.Format.RGBA8888);
-			mPixmapBorder[i].setColor(BORDER_COLORS[i]);
-			mPixmapBorder[i].drawRectangle(0, 0, mPixmapBorder[i].getWidth(), mPixmapBorder[i].getHeight());
+			pixmapBorder = new Pixmap(GRID_WIDTH_DEFAULT+2, GRID_WIDTH_DEFAULT+2, Pixmap.Format.RGBA8888);
+			pixmapBorder.setColor(BORDER_COLORS[i]);
+			pixmapBorder.drawRectangle(0, 0, pixmapBorder.getWidth(), pixmapBorder.getHeight());
+			mTextureBorder[i] = new Texture(pixmapBorder);
 		}		
 	}
 	
@@ -127,7 +132,7 @@ public class Board {
 	{
 		Axis gridAxis;
 		gridAxis = getGridAxis(i,j);
-		mPixmapBoard.drawPixmap(mPixmapGrid[mGrids[i][j].owner], gridAxis.x, gridAxis.y);
+		mBatch.draw(mTextureGrid[mGrids[i][j].owner],gridAxis.x, gridAxis.y);
 	}
 	
 	private void drawBorder(int i,int j, boolean clear)
@@ -135,13 +140,16 @@ public class Board {
 		Axis borderAxis;
 		borderAxis = getGridBorderAxis(i,j);
 		if(clear)
-			mPixmapBoard.drawPixmap(mPixmapBorder[0], borderAxis.x, borderAxis.y);
+			mBatch.draw(mTextureBorder[0], borderAxis.x, borderAxis.y);
 		else
-			mPixmapBoard.drawPixmap(mPixmapBorder[mGrids[i][j].border], borderAxis.x, borderAxis.y);
+			mBatch.draw(mTextureBorder[mGrids[i][j].border], borderAxis.x, borderAxis.y);
 	}
 	
-	private Texture drawBoardAll()
+	private void drawBoardAll()
 	{	
+		if(!mUpdateNeeded)
+			return;
+		
 		for(int i=0;i<mGridNumber;i++)
 			for(int j=0;j<mGridNumber;j++) {
 				if(mGrids[i][j].owner!=0) {
@@ -151,7 +159,6 @@ public class Board {
 					drawBorder(i,j,false);
 				}
 			}
-		return new Texture(mPixmapBoard);
 	}
 	
 	public void setBoardEmpty()
@@ -161,13 +168,11 @@ public class Board {
 				mGrids[i][j].owner=0;
 				mGrids[i][j].border=0;
 			}
-		mUpdateNeeded=true;
 	}
 	
 	public void setColor(int playerID, int x, int y)
 	{
 		mGrids[x][y].owner = playerID;
-		mUpdateNeeded = true;
 	}
 	
 	public void setGridBorder(boolean enable, int x, int y)
@@ -176,7 +181,6 @@ public class Board {
 			mGrids[x][y].border=1;
 		else
 			mGrids[x][y].border=2;
-		mUpdateNeeded=true;
 	}
 	
 	public void clearGridsBorder()
@@ -184,7 +188,6 @@ public class Board {
 		for(int i=0;i<mGridNumber;i++)
 			for(int j=0;j<mGridNumber;j++) {
 				if(mGrids[i][j].border!=0) {
-					drawBorder(i,j,true);
 					mGrids[i][j].border=0;
 				}
 			}
@@ -193,16 +196,16 @@ public class Board {
 	private Axis getGridAxis(int gridX, int gridY)
 	{
 		Axis axis=new Axis();
-		axis.x = 1 + gridX * (GRID_WIDTH_DEFAULT+1) ;
-		axis.y = 1 + gridY * (GRID_WIDTH_DEFAULT+1) ;
+		axis.x = 1 + gridX * (GRID_WIDTH_DEFAULT+1) + Layout.BOARD_LAYOUT.x ;
+		axis.y = 1 + gridY * (GRID_WIDTH_DEFAULT+1) + Layout.BOARD_LAYOUT.y ;
 		return axis;
 	}
 	
 	private Axis getGridBorderAxis(int gridX, int gridY)
 	{
 		Axis axis=new Axis();
-		axis.x = gridX * (GRID_WIDTH_DEFAULT+1) ;
-		axis.y = gridY * (GRID_WIDTH_DEFAULT+1) ;
+		axis.x = gridX * (GRID_WIDTH_DEFAULT+1) + Layout.BOARD_LAYOUT.x ;
+		axis.y = gridY * (GRID_WIDTH_DEFAULT+1) + Layout.BOARD_LAYOUT.y;
 		return axis;
 	}
 
@@ -213,20 +216,30 @@ public class Board {
 	}
 	
 	
-	private void drawBoard()
+	private void drawEmptyBoard()
 	{
-		if(!mUpdateNeeded)
-			return;
-		mTextureBoard=drawBoardAll();
-		mSprite = new Sprite(mTextureBoard);
-		mSprite.setPosition(Layout.BOARD_LAYOUT.x, Layout.BOARD_LAYOUT.y);
-		mUpdateNeeded=false;
+		mBatch.draw(mTextureBoard, Layout.BOARD_LAYOUT.x, Layout.BOARD_LAYOUT.y);
 	}
 
-	public void draw(SpriteBatch batch)
+	public void draw()
 	{
-		drawBoard();
-		mSprite.draw(batch);
+		drawEmptyBoard();
+		drawBoardAll();
+	}
+	
+	private void diaposeArray(Texture [] textures)
+	{
+		for(int i=0; i< textures.length; i++)
+		{
+			textures[i].dispose();
+		}
+	}
+	
+	public void diapose()
+	{
+		mTextureBoard.dispose();
+		diaposeArray(mTextureGrid);
+		diaposeArray(mTextureBorder);
 	}
 	
 	private class Grid

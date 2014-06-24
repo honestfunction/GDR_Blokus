@@ -220,6 +220,7 @@ public class Board {
 		mTextureBoard=drawBoardAll();
 		mSprite = new Sprite(mTextureBoard);
 		mSprite.setPosition(Layout.BOARD_LAYOUT.x, Layout.BOARD_LAYOUT.y);
+		mUpdateNeeded=false;
 	}
 
 	public void draw(SpriteBatch batch)

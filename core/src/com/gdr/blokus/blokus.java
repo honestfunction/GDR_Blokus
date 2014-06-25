@@ -11,7 +11,6 @@ public class blokus extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
 	Board board;
-	Panel userPanel;
 	OrthographicCamera camera;
 	
 	@Override
@@ -19,9 +18,6 @@ public class blokus extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		board = new Board();
 		board.initial(batch);
-		
-		userPanel = new Panel(board, 1);
-		userPanel.initial(batch);
 	}
 	
 	public void testBoard()
@@ -37,7 +33,6 @@ public class blokus extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		board.draw();
-		userPanel.draw();
 		batch.end();
 	}
 	

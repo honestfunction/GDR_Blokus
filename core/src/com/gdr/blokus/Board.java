@@ -203,12 +203,28 @@ public class Board {
 		return axis;
 	}
 
+	public int getGridOwner(int gridX, int gridY)
+	{
+		return mGrids[gridX][gridY].owner;
+	}
 	
 	public int getWidth()
 	{
 		return mBoardWidth;
 	}
 	
+	public int getGridNumber()
+	{
+		return mGridNumber;
+	}
+	
+	public Vector2 getGridByAbs(int absX, int absY)
+	{
+		int relX = absX-(int)Layout.BOARD_LAYOUT.x;
+		int relY = absY-(int)Layout.BOARD_LAYOUT.y;
+		Gdx.app.error("getGridByAbs",String.format("%d %d", relX,relY));
+		return new Vector2(relX/GlobalConfig.GRID_WIDTH_DEFAULT, relY/GlobalConfig.GRID_WIDTH_DEFAULT);
+	}
 	
 	private void drawEmptyBoard()
 	{

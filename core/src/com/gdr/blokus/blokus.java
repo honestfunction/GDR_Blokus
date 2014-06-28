@@ -12,27 +12,29 @@ public class blokus extends ApplicationAdapter {
 	Texture img;
 	Board board;
 	OrthographicCamera camera;
+	Player player;
+	Panel panel;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
+	    camera = new OrthographicCamera();
+	    camera.setToOrtho(false, 800, 480);
+
 		board = new Board();
 		board.initial(batch);
+		panel = new Panel(null, Layout.PANEL_LAYOUT.x, Layout.PANEL_LAYOUT.y, board, 1);
+		player = new Player(board, panel,camera);
+		Gdx.input.setInputProcessor(player.getInputHandler());
 	}
-	
-	public void testBoard()
-	{
-		board.setColor(2, 5, 5);
-		board.setColor(1, 2, 3);
-		board.setGridBorder(false, 2, 3);
-	}
-	
+		
 	@Override
 	public void render () {
 		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		board.draw();
+		panel.drawBox(batch);
 		batch.end();
 	}
 	

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 
 public class Player {
 	boolean mHold;
@@ -52,7 +51,7 @@ public class Player {
 	
 	private void releaseChess()
 	{
-		mPanel.getChess(mChessHold).setState(Chess.Status.PANEL);
+		
 		mBoard.clearGridsBorder();
 		mChessHold = null;
 		mHold = false;
@@ -62,9 +61,9 @@ public class Player {
 	{
 		for(String type: GlobalConfig.CHESS_TYPE){
 			Chess curChess = mPanel.getChess(type);
-			if(curChess.isOnChess(x, y)){
+			if(curChess.isOnChess(x, y) && curChess.getStatus()== Chess.Status.PANEL){
 				Gdx.app.error("checkOnChess", "succcess");
-				curChess.setState(Chess.Status.HOLD);
+				curChess.setStatus(Chess.Status.HOLD);
 				curChess.setHoldAxis(x, y);
 				holdChess(type);
 				return true;
@@ -115,8 +114,9 @@ public class Player {
 					if(checkOnBoard(touchX,touchY)){
 						putChess(touchX, touchY);
 					}else {
-						releaseChess();
+						mPanel.getChess(mChessHold).setStatus(Chess.Status.PANEL);
 					}
+					releaseChess();
 				}
 				return true; // return true to indicate the event was handled
 			}

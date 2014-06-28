@@ -44,7 +44,7 @@ public final class Executor {
 				if(checkNeighbor(board, cur,playerID))
 					board.setGridBorder(true, (int)cur.x, (int)cur.y);
 				else
-					board.setGridBorder(false, (int)cur.x, (int)cur.x);
+					board.setGridBorder(false, (int)cur.x, (int)cur.y);
 			}
 		}
 	}
@@ -52,6 +52,7 @@ public final class Executor {
 	public static void putBoard(Board board, Chess chess, int x, int y, int playerID)
 	{
 		int gridNum = board.getGridNumber();
+		boolean drawable=true;
 		Vector2 gridPos = board.getGridByAbs(x, y);
 		Array<Vector2> grids = chess.getCurGrids();
 		Vector2 cur = new Vector2(); 
@@ -62,14 +63,34 @@ public final class Executor {
 			cur.y= gridPos.y + perGrid.y;
 			
 			if(cur.x >=0 && cur.x<gridNum && cur.y >=0 && cur.y<gridNum){
-				if(checkNeighbor(board, cur,playerID)){
-					board.setColor(playerID, (int)cur.x, (int)cur.y);
-					chess.setState(Chess.Status.BOARD);
+				if(!checkNeighbor(board, cur,playerID)){
+					drawable=false;
 				}
-				else {
-					chess.setState(Chess.Status.PANEL);
-				}
+			} else {
+				drawable=false;
 			}
 		}
+		if(drawable){
+			putChess(board, grids, (int)gridPos.x, (int)gridPos.y, playerID);
+			chess.setStatus(Chess.Status.BOARD);
+		} else {
+			chess.setStatus(Chess.Status.PANEL);
+		}
+	}
+	
+	public static void putChess(Board board, Array<Vector2> grids, int gridX, int gridY, int playerID)
+	{
+		Vector2 cur = new Vector2();
+		for(Vector2 perGrid: grids){
+			cur.x = perGrid.x + gridX;
+			cur.y = perGrid.y + gridY;
+			board.setColor(playerID, (int)cur.x, (int)cur.y);
+		}
+	}
+	
+	public static void putOtherChess(Board board, Chess chess, int gridX, int gridY, int direction, int playerID)
+	{
+		Array<Vector2> grids= chess.getRotationGrids(direction);
+		putChess(board, grids, gridX, gridY, playerID);
 	}
 }

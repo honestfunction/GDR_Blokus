@@ -3,7 +3,7 @@ package com.gdr.blokus;
 import com.badlogic.gdx.graphics.Color;
 
 public final class GlobalConfig {
-	static String VERSION="0.0.1.0";
+	static String VERSION="0.0.2.0";
 	
 	static int DEFAULT_PLAYERS=2;
 	

@@ -47,9 +47,13 @@ public class Chess extends UIBox {
 		return vTarget;
 	}
 	
-	public void setState(Status val)
+	public void setStatus(Status val)
 	{
 		mStatus = val;
+	}
+	public Status getStatus()
+	{
+		return mStatus;
 	}
 	
 	public void setHoldAxis(int x, int y)
@@ -84,6 +88,19 @@ public class Chess extends UIBox {
 			posY = -temp;
 		}
 		return new Vector2(posX, posY);
+	}
+	
+	public Array<Vector2> getRotationGrids(int direction)
+	{
+		Array<Vector2> rotationGrids = new Array<Vector2>();
+		if (direction==0){
+			rotationGrids = mDefaultGrids;
+		}
+		
+		for(Vector2 grid: mDefaultGrids){
+			rotationGrids.add(rotateAxis(grid, direction));
+		}
+		return rotationGrids;
 	}
 	
 	public void rotate()

@@ -347,7 +347,7 @@ public class Panel extends UIBox{
 			 *   OX
 			 *  XX
 			 */			
-			return new Vector2(145,160);
+			return new Vector2(145,155);
 		} else if(type.equals("P")){
 			/*
 			 *    X

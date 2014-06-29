@@ -98,7 +98,7 @@ public class Player {
 				int touchX = (int) vectorTouch.x;
 				int touchY = (int) vectorTouch.y;
 
-				Gdx.app.error("TouchDown", "onChess");
+				Gdx.app.error("TouchDown", String.format("onChess:(%d,%d)", touchX,touchY));
 				checkOnChess(touchX, touchY);
 				return true; // return true to indicate the event was handled
 			}

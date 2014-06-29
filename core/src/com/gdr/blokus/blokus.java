@@ -29,7 +29,7 @@ public class blokus extends ApplicationAdapter {
 		panel = new Panel(null, Layout.PANEL_LAYOUT.x, Layout.PANEL_LAYOUT.y, board, 1);
 		player = new Player(board, panel,camera);
 		Gdx.input.setInputProcessor(player.getInputHandler());
-		font = new BitmapFont(Gdx.files.internal("version.fnt"));
+		font = new BitmapFont(Gdx.files.internal("font/version.fnt"));
 		font.setColor(Color.BLACK);
 	}
 		

@@ -133,9 +133,164 @@ public class Panel extends UIBox{
 			target.add(new Vector2(-1,0));
 			target.add(new Vector2(0,1));
 			target.add(new Vector2(1,1));
-		}
+		} else if(type.equals("I")){
+			/*
+			 *  XXOXX
+			 */
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(-2,0));
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(2,0));
+		} else if(type.equals("shortI")){
+			/*
+			 *  XOXX
+			 */
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(2,0));
+		} else if(type.equals("L")){
+			/*
+			 *  XO
+			 *   X
+			 *   X
+			 *   X
+			 */				
+			target.add(new Vector2(0,-1));
+			target.add(new Vector2(0,-2));
+			target.add(new Vector2(0,-3));
+			target.add(new Vector2(-1,0));
+		} else if(type.equals("U")){
+			/*
+			 *  X X
+			 *  XOX
+			 */			
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(1,1));
+			target.add(new Vector2(-1,1));
+		} else if(type.equals("W")){
+			/*
+			 *    X
+			 *   OX
+			 *  XX
+			 */			
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(1,1));
+			target.add(new Vector2(0,-1));
+			target.add(new Vector2(-1,-1));
+		} else if(type.equals("P")){
+			/*
+			 *    X
+			 *   XO
+			 *   XX
+			 */			
+			target.add(new Vector2(0,-1));
+			target.add(new Vector2(-1,-1));
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(0,1));
+		} else if(type.equals("shortT")){
+			/*	  
+			 *   XOX
+			 *    X
+			 */			
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(0,-1));
+			target.add(new Vector2(-1,0));
+			
+		} else if(type.equals("X")){
+			/*
+			 *    X
+			 *   XOX
+			 *    X
+			 */			
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(0,-1));
+		} else if(type.equals("crooked3")){
+			/*
+			 *    OX
+			 *    X
+			 */			
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(0,-1));
+		} else if(type.equals("shortL")){
+			/*
+			 *    X
+			 *  XXO
+			 */			
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(-2,0));
+		} else if(type.equals("square")){
+			/*
+			 *  XX
+			 *  OX
+			 */			
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(1,1));
+		} else if(type.equals("V")){
+			/*  X
+			 *  X
+			 *  OXX
+			 */			
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(0,2));
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(2,0));
+		} else if(type.equals("Z")){
+			/*  
+			 *  XX
+			 *   O
+			 *   XX
+			 */			
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(-1,1));
+			target.add(new Vector2(0,-1));
+			target.add(new Vector2(1,-1));
+		} else if(type.equals("T")){
+			/*  
+			 *  XXX
+			 *   O
+			 *   X
+			 */			
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(-1,1));
+			target.add(new Vector2(1,1));
+			target.add(new Vector2(0,-1));
+		} else if(type.equals("F")){
+			/*  
+			 *   X
+			 *  XOX
+			 *    X
+			 */			
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(1,-1));
+		} else if(type.equals("Y")){
+			/*  
+			 *   X
+			 *  XOXX
+			 */		
+			target.add(new Vector2(1,0));
+			target.add(new Vector2(2,0));
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(0,1));
+		} else if(type.equals("N")){
+			/*  
+			 *    XX
+			 *  XXO
+			 */			
+			target.add(new Vector2(0,1));
+			target.add(new Vector2(1,1));
+			target.add(new Vector2(-1,0));
+			target.add(new Vector2(-2,0));
+		} 
+		
 		return target;
-	}
+	} 
 	
 	private Vector2 getChessLayout(String type)
 	{
@@ -156,14 +311,123 @@ public class Panel extends UIBox{
 			 *  XOX
 			 */
 			return new Vector2(50,50);
-		}
-		else if(type.equals("shortZ")){
+		} else if(type.equals("shortZ")){
 			/*
 			 *   XX
 			 *  XO
 			 */
-			return new Vector2(50,100);
-		}
+			return new Vector2(50,90);
+		} else if(type.equals("I")){
+			/*
+			 *  XXOXX
+			 */
+			return new Vector2(180,10);
+		}  else if(type.equals("shortI")){
+			/*
+			 *  XOXX
+			 */			
+			return new Vector2(160,50);
+		}  else if(type.equals("L")){
+			/*
+			 *  XO
+			 *   X
+			 *   X
+			 *   X
+			 */			
+			return new Vector2(240,395);
+		}  else if(type.equals("U")){
+			/*
+			 *  X X
+			 *  XOX
+			 */			
+			return new Vector2(50,160);
+		} else if(type.equals("W")){
+			/*
+			 *    X
+			 *   OX
+			 *  XX
+			 */			
+			return new Vector2(145,160);
+		} else if(type.equals("P")){
+			/*
+			 *    X
+			 *   XO
+			 *   XX
+			 */			
+			return new Vector2(240, 190);
+		} else if(type.equals("shortT")){
+			/*	  
+			 *   XOX
+			 *    X
+			 */			
+			return new Vector2(113, 265);
+		} else if(type.equals("X")){
+			/*
+			 *    X
+			 *   XOX
+			 *    X
+			 */			
+			return new Vector2(50, 230);
+		} else if(type.equals("crooked3")){
+			/*
+			 *    OX
+			 *    X
+			 */			
+			return new Vector2(113, 193);
+		} else if(type.equals("shortL")){
+			/*
+			 *    X
+			 *  XXO
+			 */			
+			return new Vector2(180, 90);
+		} else if(type.equals("square")){
+			/*
+			 *  XX
+			 *  OX
+			 */			
+			return new Vector2(215, 90);
+		} else if(type.equals("V")){
+			/*  
+			 *  X
+			 *  X
+			 *  OXX
+			 */
+			return new Vector2(10, 300);
+		} else if(type.equals("Z")){
+			/*  
+			 *  XX
+			 *   O
+			 *   XX
+			 */			
+			return new Vector2(45, 365);
+		} else if(type.equals("T")){
+			/*  
+			 *  XXX
+			 *   O
+			 *   X
+			 */			
+			return new Vector2(110, 365);
+		} else if(type.equals("F")){
+			/*  
+			 *   X
+			 *  XOX
+			 *    X
+			 */			
+			return new Vector2(175, 360);
+		} else if(type.equals("Y")){
+			/*  
+			 *   X
+			 *  XOXX
+			 */			
+			return new Vector2(150, 298);
+		} else if(type.equals("N")){
+			/*  
+			 *    XX
+			 *  XXO
+			 */			
+			return new Vector2(207, 230);
+		} 
+		
 		return new Vector2(0,0);
 	}
 }

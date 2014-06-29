@@ -3,7 +3,7 @@ package com.gdr.blokus;
 import com.badlogic.gdx.graphics.Color;
 
 public final class GlobalConfig {
-	static String VERSION="0.0.2.0";
+	static String VERSION="0.0.3.0";
 	
 	static int DEFAULT_PLAYERS=2;
 	
@@ -15,5 +15,7 @@ public final class GlobalConfig {
 	static Color [] PLAYER_COLORS ={BACKGROUND_COLOR, Color.GREEN, Color.BLUE, Color.PINK, Color.YELLOW};
 	static Color [] BORDER_COLORS ={EDGE_COLOR, Color.WHITE, Color.RED};
 
-	static String [] CHESS_TYPE={"1", "2", "3","shortZ"};
+	static String [] CHESS_TYPE={"1", "2", "3","I","shortI","L", "U", "Z","T",
+		"shortZ","W", "P", "X","shortT","crooked3", 
+		"shortL", "square","Y","N","V","F"};
 }

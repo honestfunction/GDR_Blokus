@@ -2,9 +2,11 @@ package com.gdr.blokus;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class blokus extends ApplicationAdapter {
@@ -14,6 +16,7 @@ public class blokus extends ApplicationAdapter {
 	OrthographicCamera camera;
 	Player player;
 	Panel panel;
+	BitmapFont font;
 	
 	@Override
 	public void create () {
@@ -26,6 +29,8 @@ public class blokus extends ApplicationAdapter {
 		panel = new Panel(null, Layout.PANEL_LAYOUT.x, Layout.PANEL_LAYOUT.y, board, 1);
 		player = new Player(board, panel,camera);
 		Gdx.input.setInputProcessor(player.getInputHandler());
+		font = new BitmapFont(Gdx.files.internal("version.fnt"));
+		font.setColor(Color.BLACK);
 	}
 		
 	@Override
@@ -35,6 +40,7 @@ public class blokus extends ApplicationAdapter {
 		batch.begin();
 		board.draw();
 		panel.drawBox(batch);
+		font.draw(batch, String.format("ª©¥»: %s", GlobalConfig.VERSION), 0, 20);
 		batch.end();
 	}
 	

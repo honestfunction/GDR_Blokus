@@ -14,7 +14,10 @@ public final class GlobalConfig {
 	static Color EDGE_COLOR=Color.BLACK; 
 	static Color [] PLAYER_COLORS ={BACKGROUND_COLOR, Color.GREEN, Color.BLUE, Color.PINK, Color.YELLOW};
 	static Color [] BORDER_COLORS ={EDGE_COLOR, Color.WHITE, Color.RED};
-
+	
+	static int VISUAL_WIDTH=800;
+	static int VISUAL_HEIGHT=480;
+	
 	static String [] CHESS_TYPE={"1", "2", "3","I","shortI","L", "U", "Z","T",
 		"shortZ","W", "P", "X","shortT","crooked3", 
 		"shortL", "square","Y","N","V","F"};

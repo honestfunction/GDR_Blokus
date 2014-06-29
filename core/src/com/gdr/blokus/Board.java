@@ -40,9 +40,8 @@ public class Board {
 	private void initLayout()
 	{
 		Layout.BOARD_LAYOUT = new Vector2();
-		//Layout.BOARD_LAYOUT.x = (Gdx.graphics.getWidth()-getWidth())/2;
 		Layout.BOARD_LAYOUT.x = 20;
-		Layout.BOARD_LAYOUT.y = (Gdx.graphics.getHeight()-getWidth())/2;
+		Layout.BOARD_LAYOUT.y = (GlobalConfig.VISUAL_HEIGHT-getWidth())/2;
 	}
 	
 	private void setupBoard()

@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class blokus extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -17,13 +19,16 @@ public class blokus extends ApplicationAdapter {
 	Player player;
 	Panel panel;
 	BitmapFont font;
+	Viewport viewport;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 	    camera = new OrthographicCamera();
-	    camera.setToOrtho(false, 800, 480);
-
+	    camera.setToOrtho(false, GlobalConfig.VISUAL_WIDTH, GlobalConfig.VISUAL_HEIGHT);
+	    camera.update();
+	    viewport = new FitViewport(GlobalConfig.VISUAL_WIDTH, GlobalConfig.VISUAL_HEIGHT,camera);
+	    
 		board = new Board();
 		board.initial(batch);
 		panel = new Panel(null, Layout.PANEL_LAYOUT.x, Layout.PANEL_LAYOUT.y, board, 1);
@@ -35,6 +40,9 @@ public class blokus extends ApplicationAdapter {
 		
 	@Override
 	public void render () {
+		batch.setProjectionMatrix(camera.projection);
+		batch.setTransformMatrix(camera.view);
+
 		Gdx.gl.glClearColor(1, 1, 1, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
@@ -44,4 +52,9 @@ public class blokus extends ApplicationAdapter {
 		batch.end();
 	}
 	
+
+	public void resize(int width, int height) {
+	    viewport.update(width, height);
+	}
+
 }

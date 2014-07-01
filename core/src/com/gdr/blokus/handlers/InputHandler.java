@@ -26,61 +26,32 @@ public class InputHandler extends InputAdapter{
 	
 	public boolean touchDown (int x, int y, int pointer, int button) {
 		Vector2 vectorTouch = translateAxis(x,y);
-		int touchX = (int) vectorTouch.x;
-		int touchY = (int) vectorTouch.y;
-
-		Gdx.app.error("TouchDown", String.format("onChess:(%d,%d)", touchX,touchY));
-		mPlayer.checkOnChess(touchX, touchY);
+		mPlayer.mouseDown((int) vectorTouch.x, (int) vectorTouch.y);
+		
 		return true; // return true to indicate the event was handled
 	}
 
 	public boolean touchUp (int x, int y, int pointer, int button) {
 		Vector2 vectorTouch = translateAxis(x,y);
-		int touchX = (int) vectorTouch.x;
-		int touchY = (int) vectorTouch.y;
 
 		Gdx.app.error("TouchUp", "releaseChess");
-		
-		if(mPlayer.isHold()){
-			if(mPlayer.checkOnBoard(touchX,touchY)){
-				mPlayer.putChess(touchX, touchY);
-			}else {
-				mPlayer.getHoldChess().setStatus(Chess.Status.PANEL);
-			}
-			mPlayer.releaseChess();
-		}
+		mPlayer.mouseUp((int) vectorTouch.x, (int) vectorTouch.y);
 		return true; // return true to indicate the event was handled
 	}
 	
 	public boolean touchDragged (int x, int y, int pointer) {
 		Vector2 vectorTouch = translateAxis(x,y);
-		int touchX = (int) vectorTouch.x;
-		int touchY = (int) vectorTouch.y;
-		
-		Gdx.app.error("TouchDragged", "HoldChess");
-		if(mPlayer.isHold()){
-			mPlayer.getHoldChess().setHoldAxis(touchX, touchY);
-			if(mPlayer.checkOnBoard(touchX,touchY)){
-				mPlayer.testChess(touchX,touchY);
-			}
-		}
+		mPlayer.mouseDragged((int) vectorTouch.x, (int) vectorTouch.y);
 		return true;
 	}
 	
 	public boolean keyDown (int keycode) {
 		Gdx.app.error("KeyDown", "Event");
 		if(keycode == Keys.DOWN){
-			int firstX = Gdx.input.getX();
-			int firstY = Gdx.input.getY();
-			Vector2 vectorTouch = translateAxis(firstX,firstY);
-			int touchX = (int) vectorTouch.x;
-			int touchY = (int) vectorTouch.y;
-			
-			Gdx.app.error("KeyDown", "Down");
-			if(mPlayer.isHold()){
-				mPlayer.getHoldChess().rotate();
-				mPlayer.testChess(touchX,touchY);
-			}
+			int curX = Gdx.input.getX();
+			int curY = Gdx.input.getY();
+			Vector2 vectorTouch = translateAxis(curX,curY);
+			mPlayer.rotatePressed((int) vectorTouch.x, (int) vectorTouch.y);
 		}
 	    return true;
 	}

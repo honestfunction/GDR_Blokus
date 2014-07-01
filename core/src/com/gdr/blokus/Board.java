@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-public class Board {
+public class Board extends UIBox{
 	
     private Texture mTextureBoard;
     private Texture [] mTextureGrid;
@@ -15,35 +15,21 @@ public class Board {
 	int mGridNumber;
 	int mBoardWidth;
 	boolean mUpdateNeeded=true;
-	SpriteBatch mBatch;
 	
 	Sprite mSprite;
 	Grid[][] mGrids;
 	
-	Board()
+	Board(UIBox parent, float x, float y, int playerNum)
 	{
-		mPlayers = GlobalConfig.DEFAULT_PLAYERS;
+		super(parent,x,y);
+		mPlayers = playerNum;
 	}
-	
-	Board(int players)
+
+	public void initial()
 	{
-		mPlayers = players;
-	}
-	
-	public void initial(SpriteBatch batch)
-	{
-		mBatch=batch;
 		setupBoard();
-		initLayout();
 	}
-	
-	private void initLayout()
-	{
-		Layout.BOARD_LAYOUT = new Vector2();
-		Layout.BOARD_LAYOUT.x = 20;
-		Layout.BOARD_LAYOUT.y = (GlobalConfig.VISUAL_HEIGHT-getWidth())/2;
-	}
-	
+		
 	private void setupBoard()
 	{
 		if(mPlayers>2) {
@@ -121,24 +107,24 @@ public class Board {
 		}		
 	}
 	
-	private void drawField(int i, int j)
+	private void drawField(SpriteBatch batch,int i, int j)
 	{
 		Vector2 gridAxis;
 		gridAxis = getGridAxis(i,j);
-		mBatch.draw(mTextureGrid[mGrids[i][j].owner],gridAxis.x, gridAxis.y);
+		batch.draw(mTextureGrid[mGrids[i][j].owner],gridAxis.x, gridAxis.y);
 	}
 	
-	private void drawBorder(int i,int j, boolean clear)
+	private void drawBorder(SpriteBatch batch, int i,int j, boolean clear)
 	{
 		Vector2 borderAxis;
 		borderAxis = getGridBorderAxis(i,j);
 		if(clear)
-			mBatch.draw(mTextureBorder[0], borderAxis.x, borderAxis.y);
+			batch.draw(mTextureBorder[0], borderAxis.x, borderAxis.y);
 		else
-			mBatch.draw(mTextureBorder[mGrids[i][j].border], borderAxis.x, borderAxis.y);
+			batch.draw(mTextureBorder[mGrids[i][j].border], borderAxis.x, borderAxis.y);
 	}
 	
-	private void drawBoardAll()
+	private void drawBoardAll(SpriteBatch batch)
 	{	
 		if(!mUpdateNeeded)
 			return;
@@ -146,10 +132,10 @@ public class Board {
 		for(int i=0;i<mGridNumber;i++)
 			for(int j=0;j<mGridNumber;j++) {
 				if(mGrids[i][j].owner!=0) {
-					drawField(i,j);
+					drawField(batch,i,j);
 				}
 				if(mGrids[i][j].border!=0) {
-					drawBorder(i,j,false);
+					drawBorder(batch,i,j,false);
 				}
 			}
 	}
@@ -225,15 +211,15 @@ public class Board {
 		return new Vector2(relX/GlobalConfig.GRID_WIDTH_DEFAULT, relY/GlobalConfig.GRID_WIDTH_DEFAULT);
 	}
 	
-	private void drawEmptyBoard()
+	private void drawEmptyBoard(SpriteBatch batch)
 	{
-		mBatch.draw(mTextureBoard, Layout.BOARD_LAYOUT.x, Layout.BOARD_LAYOUT.y);
+		batch.draw(mTextureBoard, Layout.BOARD_LAYOUT.x, Layout.BOARD_LAYOUT.y);
 	}
 
-	public void draw()
+	public void draw(SpriteBatch batch)
 	{
-		drawEmptyBoard();
-		drawBoardAll();
+		drawEmptyBoard(batch);
+		drawBoardAll(batch);
 	}
 	
 	private void diaposeArray(Texture [] textures)
@@ -244,7 +230,7 @@ public class Board {
 		}
 	}
 	
-	public void diapose()
+	public void dispose()
 	{
 		mTextureBoard.dispose();
 		diaposeArray(mTextureGrid);
